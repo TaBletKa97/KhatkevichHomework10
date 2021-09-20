@@ -12,6 +12,11 @@ public class Contact {
     private String email;
     private Date dateOfBirthday;
 
+    public Contact(String nickname, String phone) {
+        this.nickname = nickname;
+        this.phoneNumbers.add(phone);
+    }
+
     public String getName() {
         return name;
     }
