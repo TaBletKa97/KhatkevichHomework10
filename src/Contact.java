@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Contact {
+public class Contact implements Serializable {
     private String name;
     private String surname;
     private String nickname;
@@ -73,22 +74,24 @@ public class Contact {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws IllegalArgumentException {
         boolean allOk = true;
         String email1 = email;
         String[] email2 = email1.split("@");
         if (email2.length != 2) {
-            System.out.println("Invalid Email");
+//            System.out.println("Invalid Email");
             allOk = false;
         } else {
-            String[] email3 = email2[1].split(".");
+            String[] email3 = email2[1].split("\\.");
             if (email3.length !=2) {
-                System.out.println("Invalid Email");
+//                System.out.println("Invalid Email");
                 allOk = false;
             }
         }
         if (allOk) {
             this.email = email;
+        } else {
+            throw new IllegalArgumentException("Invalid Email");
         }
     }
 
@@ -98,5 +101,35 @@ public class Contact {
 
     public void setDateOfBirthday(Date dateOfBirthday) {
         this.dateOfBirthday = dateOfBirthday;
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        if (name != null) {
+            result += ("Имя: " + name + ";\n");
+        }
+        if (surname != null) {
+            result += ("Фамилия: " + surname + ";\n");
+        }
+        if (nickname != null) {
+            result += ("Прозвище: " + nickname + ";\n");
+        }
+        if (email != null) {
+            result += ("Email: " + email + ";\n");
+        }
+        if (dateOfBirthday != null) {
+            result += ("Дата рождения: " + dateOfBirthday.toString() + ";\n");
+        }
+        if (homeNumbers.size() > 0) {
+            result += ("Домашние номера: " + homeNumbers.toString() + ";\n");
+        }
+        if (phoneNumbers.size() > 0) {
+            result += ("Мобильные номера: " + phoneNumbers.toString() + ";\n");
+        }
+        if (workNumbers.size() > 0) {
+            result += ("Рабочие номера: " + workNumbers.toString() + ";\n");
+        }
+        return result;
     }
 }
