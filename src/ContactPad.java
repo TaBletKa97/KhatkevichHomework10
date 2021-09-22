@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ContactPad {
-    Map contacts = new HashMap<String , Contact>();
+    Map<String , Contact> contacts = new HashMap<>();
 
     public ContactPad() {
         try {
@@ -54,28 +54,107 @@ public class ContactPad {
     public void go() {
         int choice = 0;
         do {
-            switch (choice = choose()) {
+            showMenu();
+            switch (choice = choose(5)) {
                 case 1:
-//                    newContact
+                    newContact();
+                    break;
+                case 2:
+                    viewContacts();
+                    break;
+                case 3:
+                    search();
+                    break;
+                case 4:
+                    //edit
+                    break;
+                case 5:
+                    break;
             }
 
         } while (choice != 5);
 
     }
 
-    private int choose() {
+    private int choose(int n) {
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
         try {
             choice = scanner.nextInt();
-            if (choice < 1 || choice > 5) {
+            if (choice < 1 || choice > n) {
                 throw new Exception();
             }
         } catch (Exception ex) {
             System.out.println("Некорректный выбор. Попробуйте снова");
-            choice = choose();
+            choice = choose(n);
         }
         return choice;
+    }
+
+    private void newContact() {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            System.out.println("Введите прозвище");
+            String nickname = scanner.nextLine();
+            System.out.println("Введите номер телефона в формате +375*********");
+            String phoneNumber = scanner.nextLine();
+            while (!phoneNumber.startsWith("+375") || phoneNumber.length() != 13) {
+                System.out.println("Введен некорректный номер. Попробуйте снова");
+                phoneNumber = scanner.nextLine();
+            }
+           addContact(nickname, phoneNumber);
+        } catch (Exception ex) {
+            System.out.println("Некорректный ввод. Попробуйте снова");
+            newContact();
+        }
+    }
+
+    private String searchNumber() {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Введите номер для поиска в формате +375********* ");
+            String number = scanner.nextLine();
+            return contacts.get(number).toString();
+        } catch (Exception ex) {
+            System.out.println("Произошла ошибка. Попробуйте еще раз");
+            return searchNumber();
+        }
+
+    }
+
+    private String searchNickname() {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Введите прозвище для поиска");
+            String name = scanner.nextLine();
+            String result = "";
+            contacts.values().forEach(con -> {
+                if (con.getNickname().equalsIgnoreCase(name)) {
+                    System.out.println(con);
+                    System.out.println("");
+                }
+            });
+            return result;
+        } catch (Exception ex) {
+            System.out.println("Произошла ошибка. Попробуйте еще раз");
+            return searchNickname();
+        }
+    }
+
+    private void search() {
+        System.out.println("1. Поиск по прозвищу");
+        System.out.println("2. Поиск по номеру");
+        System.out.println("3. Назад");
+        switch (choose(3)) {
+            case 1:
+                searchNickname();
+                break;
+            case 2:
+                System.out.println(searchNumber());
+                break;
+            case 3:
+                break;
+        }
     }
 
 }
