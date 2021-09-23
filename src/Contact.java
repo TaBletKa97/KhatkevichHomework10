@@ -1,6 +1,9 @@
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Contact implements Serializable {
     private String name;
@@ -11,7 +14,7 @@ public class Contact implements Serializable {
     private ArrayList<String> workNumbers = new ArrayList<>();
     private ArrayList<String> faxNumbers = new ArrayList<>();
     private String email;
-    private Date dateOfBirthday;
+    private Calendar dateOfBirthday;
 
     public Contact(String nickname, String phone) {
         this.nickname = nickname;
@@ -79,12 +82,10 @@ public class Contact implements Serializable {
         String email1 = email;
         String[] email2 = email1.split("@");
         if (email2.length != 2) {
-//            System.out.println("Invalid Email");
             allOk = false;
         } else {
             String[] email3 = email2[1].split("\\.");
             if (email3.length !=2) {
-//                System.out.println("Invalid Email");
                 allOk = false;
             }
         }
@@ -95,11 +96,11 @@ public class Contact implements Serializable {
         }
     }
 
-    public Date getDateOfBirthday() {
+    public Calendar getDateOfBirthday() {
         return dateOfBirthday;
     }
 
-    public void setDateOfBirthday(Date dateOfBirthday) {
+    public void setDateOfBirthday(Calendar dateOfBirthday) {
         this.dateOfBirthday = dateOfBirthday;
     }
 
@@ -119,7 +120,8 @@ public class Contact implements Serializable {
             result += ("Email: " + email + ";\n");
         }
         if (dateOfBirthday != null) {
-            result += ("Дата рождения: " + dateOfBirthday.toString() + ";\n");
+            SimpleDateFormat form = new SimpleDateFormat("dd.MM.yyy");
+            result += ("Дата рождения: " + form.format(dateOfBirthday.getTime()) + ";\n");
         }
         if (homeNumbers.size() > 0) {
             result += ("Домашние номера: " + homeNumbers.toString() + ";\n");
